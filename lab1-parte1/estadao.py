@@ -88,7 +88,6 @@ with open('estadao.csv', 'rt', encoding='utf8') as csvfile:
 
 stop = timeit.default_timer()
 
-print('Tempo decorrido: ' + str(stop - start))
 print(len(search('debate OR presidencial')))
 print(len(search('debate AND presidencial')))
 
