@@ -5,14 +5,14 @@ angular.module('recommendation')
     $scope.watchedMovies = [];
     $scope.result = [];
     var fullMovieList = [];
-    $http.get("http://localhost:9091/api/movies").then(function (resp) {
+    $http.get("http://localhost:9090/api/movies").then(function (resp) {
         fullMovieList = resp.data;
         $scope.movies = fullMovieList.slice(0, 50);
         console.log(fullMovieList);
     });
 
     $scope.getRecommendations = function () {
-        $http.post("http://localhost:9091/api/recommendation", {movie_ids: $scope.watchedMovies}, { headers: {'Content-Type': 'application/json; charset=UTF-8' }}).then(function (value) {
+        $http.post("http://localhost:9090/api/recommendation", {movie_ids: $scope.watchedMovies}, { headers: {'Content-Type': 'application/json; charset=UTF-8' }}).then(function (value) {
             $scope.result = value.data;
             for (var movie of $scope.result) {
                 movie.name = getMovieName(movie.item_id);
