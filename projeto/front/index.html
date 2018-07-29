@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Recomendações MLens</title>
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <script src="node_modules/angular/angular.js"></script>
+
+    <script src="app/app.js"></script>
+</head>
+<body ng-app="recommendation">
+    <div ng-controller="MainCtrl">
+        <div class="jumbotron" style="width: 100%">
+            <div class="container">
+                <h1 class="display-4">Recomendações de Filmes</h1>
+                <p class="lead">Autor: Sávio Muniz</p>
+                <hr class="my-4">
+                <p>Este projeto corresponde ao terceiro exercício da disciplina de Recuperação da Informação - UFCG.</p>
+                <p>O objetivo do projeto foi recomendar filmes para um usuário baseado no seu perfil de filmes assistidos
+                    e na similaridade deste mesmo perfil com o de outros usuários. Foi utilizado, para tal, um
+                    <a href="https://grouplens.org/datasets/movielens/100k/" target="_blank">banco de avaliações </a>
+                    fornecido pela Movie Lens, bem como a biblioteca de recomendações
+                    <a href="http://surpriselib.com/" target="_blank">SurpriseLib</a>.
+                </p>
+            </div>
+        </div>
+        <div class="container" ng-show="!showResults">
+            <h4>Funcionamento</h4><br>
+
+            <div>
+                <div style="float: left; width: 80%;">
+                    <p>Para testar a recomendação, adicione, abaixo, filmes que são de seu interesse.<br>
+                        Listei os 50 com melhor pontuação abaixo, mas você pode pesquisar por outros no campo de pesquisa.<br>
+                        Quando tiver escolhido todos <strong>clique no botão de confirmar ao lado</strong>. Você também pode clicar para ver todos os filmes.</p>
+                </div>
+                <div style="float: right; width: 20%;">
+                    <button class="btn btn-success" style="width: 100%; text-align: center; margin-bottom: 1%" ng-click="getRecommendations()">Confirmar</button>
+                    <button class="btn btn-info" style="width: 100%; text-align: center" ng-click="showAll()">Mostrar todos os filmes</button>
+                </div>
+            </div>
+
+
+            <input type="text" placeholder="Pesquisar filme" class="form-control" ng-model="search"><br>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Filme</th>
+                        <th scope="col">Adicionar?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="movie in movies| filter: search track by $index">
+                        <th scope="row">{{$index + 1}}</th>
+                        <td>{{movie.name}}</td>
+                        <td>
+                            <button class="btn btn-info" ng-if="!movie.added" ng-click="addMovie(movie.id); movie.added = true"><strong>+</strong></button>
+                            <button class="btn btn-success" ng-if="movie.added" style="cursor:default;"><strong>✓</strong></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="container" ng-show="showResults">
+            <h4>Resultados</h4><br>
+            <p>Estes são os 20 filmes que te recomendo assistir baseado nas suas escolhas e nos dados de avaliações em banco.</p>
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col" style="text-align: center">Posição</th>
+                    <th scope="col">Filme</th>
+                    <th scope="col">Relevância</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="movie in result| filter: search track by $index">
+                    <th scope="row" style="text-align: center">{{$index + 1}}º</th>
+                    <td>{{movie.name}}</td>
+                    <td>{{(movie.rating/5) * 100| number: 2}}%</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
